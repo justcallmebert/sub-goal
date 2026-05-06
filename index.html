@@ -393,23 +393,24 @@
             document.getElementById('progressPercent').textContent = Math.round(progress) + '%';
             document.getElementById('currentSubs').textContent = subCount;
 
-            // Update week cards
-            updateWeekCard('week1', subCount, 78, 1);
-            updateWeekCard('week2', subCount, 85, 2);
-            updateWeekCard('week3', subCount, 92, 3);
-            updateWeekCard('week4', subCount, 95, 4);
+            // Week card updates removed - HTML doesn't have week card elements
 
-            // Update milestones
+            // Update milestones - hide completed, show remaining goals
             document.querySelectorAll('.milestone').forEach(m => {
                 const count = parseInt(m.dataset.count);
                 m.classList.remove('completed', 'next', 'upcoming');
 
                 if (subCount >= count) {
-                    m.classList.add('completed');
-                } else if (subCount >= count - 10) {
-                    m.classList.add('next');
+                    // Hide completed milestones
+                    m.style.display = 'none';
                 } else {
-                    m.classList.add('upcoming');
+                    // Show remaining milestones
+                    m.style.display = 'block';
+                    if (subCount >= count - 10) {
+                        m.classList.add('next');
+                    } else {
+                        m.classList.add('upcoming');
+                    }
                 }
             });
 
