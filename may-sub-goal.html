@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JustCallMeBert May Sub Goal Tracker</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            color: #667eea;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 1.1em;
+            margin-bottom: 5px;
+        }
+
+        .goal-text {
+            color: #764ba2;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        .input-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            display: flex;
+            gap: 10px;
+            align-items: flex-end;
+            flex-wrap: wrap;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        label {
+            font-weight: 600;
+            color: #333;
+            font-size: 0.9em;
+        }
+
+        input[type="number"] {
+            padding: 10px 15px;
+            border: 2px solid #667eea;
+            border-radius: 5px;
+            font-size: 1em;
+            width: 120px;
+        }
+
+        button {
+            padding: 10px 25px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1em;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background: #764ba2;
+        }
+
+        .progress-section {
+            margin-bottom: 40px;
+        }
+
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .current-subs {
+            font-size: 1.3em;
+            color: #667eea;
+        }
+
+        .progress-bar-container {
+            background: #e9ecef;
+            border-radius: 10px;
+            height: 40px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 0.9em;
+            transition: width 0.5s ease;
+            min-width: 50px;
+        }
+
+        .week-targets {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .week-card {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .week-card.completed {
+            border-left-color: #28a745;
+            background: #e8f5e9;
+        }
+
+        .week-label {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .week-target {
+            color: #666;
+            font-size: 0.95em;
+        }
+
+        .milestones-section {
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            font-size: 1.4em;
+            color: #667eea;
+            margin-bottom: 20px;
+            font-weight: 600;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .milestone-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+        }
+
+        .milestone {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #ddd;
+            transition: all 0.3s;
+        }
+
+        .milestone.upcoming {
+            border-left-color: #667eea;
+            background: #f0f4ff;
+        }
+
+        .milestone.next {
+            border-left-color: #764ba2;
+            background: #faf6ff;
+            font-weight: 500;
+        }
+
+        .milestone.completed {
+            border-left-color: #28a745;
+            background: #e8f5e9;
+            opacity: 0.7;
+        }
+
+        .milestone-count {
+            font-weight: bold;
+            color: #667eea;
+            font-size: 1.1em;
+            margin-bottom: 5px;
+        }
+
+        .milestone.completed .milestone-count {
+            color: #28a745;
+        }
+
+        .milestone.next .milestone-count {
+            color: #764ba2;
+            font-size: 1.3em;
+        }
+
+        .milestone-text {
+            color: #555;
+            font-size: 0.95em;
+        }
+
+        .tier-header {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1.1em;
+        }
+
+        .mechanics {
+            background: #fff3cd;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #ffc107;
+            margin-top: 30px;
+        }
+
+        .mechanics h3 {
+            color: #856404;
+            margin-bottom: 10px;
+        }
+
+        .mechanics-text {
+            color: #856404;
+            font-size: 0.95em;
+            line-height: 1.6;
+        }
+
+        .bonus-item {
+            margin: 8px 0 8px 20px;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            color: #999;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎮 May Sub Goal 🎮</h1>
+            <p class="goal-text">Target: 400 Total Subscriptions</p>
+        </div>
+
+        <div class="input-section">
+            <div class="input-group">
+                <label for="subCount">Current Total Sub Count:</label>
+                <input type="number" id="subCount" value="61" min="61" max="500">
+            </div>
+            <button onclick="updateProgress()">Update Progress</button>
+            <button onclick="resetProgress()">Reset to 0</button>
+        </div>
+
+        <div class="progress-section">
+            <div class="progress-label">
+                <span>Overall Progress</span>
+                <span class="current-subs"><span id="currentSubs">61</span> / 400 Total Subs</span>
+            </div>
+            <div class="progress-bar-container">
+                <div class="progress-bar" id="progressBar" style="width: 0%">
+                    <span id="progressPercent">0%</span>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="milestones-section">
+            <h2 class="section-title">Tier 1: (61-145 Subs)</h2>
+            <div class="milestone-grid" id="tier1"></div>
+        </div>
+
+        <div class="milestones-section">
+            <h2 class="section-title">Tier 2: (145-245 Subs)</h2>
+            <div class="milestone-grid" id="tier2"></div>
+        </div>
+
+        <div class="milestones-section">
+            <h2 class="section-title">Tier 3: (245-330 Subs)</h2>
+            <div class="milestone-grid" id="tier3"></div>
+        </div>
+
+        <div class="milestones-section">
+            <h2 class="section-title">Tier 4: (330-400 Subs)</h2>
+            <div class="milestone-grid" id="tier4"></div>
+        </div>
+
+        <div class="mechanics">
+            <h3>⭐ Bonus Rewards</h3>
+            <div class="mechanics-text">
+                <div class="bonus-item"><strong>Hit Week 1 Target (146 total):</strong> Unlock Wheel Spins For Month</div>
+                <div class="bonus-item"><strong>Hit Week 2 Target (231 total):</strong> Hype Train Thursday</div>
+                <div class="bonus-item"><strong>Hit Week 3 Target (316 total):</strong> Design an emote for the channel Competition</div>
+                <div class="bonus-item"><strong>Hit Week 4 Target (400 total):</strong> VIP Power Hour with special commands</div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>💪 Let's hit 400 this month! 🚀</p>
+            <p style="margin-top: 10px; font-size: 0.85em;">Last updated: <span id="timestamp">Never</span></p>
+            <p style="margin-top: 5px; font-size: 0.85em;">Share this link in Discord or on your stream to show community progress</p>
+        </div>
+    </div>
+
+    <script>
+        const milestones = {
+            tier1: [
+                { count: 70, text: "Chat picks my next RL decal" },
+                { count: 75, text: "1-hour RL 1v1 challenge vs chat" },
+                { count: 85, text: "First-person camera RL match" },
+                { count: 100, text: "Chat votes: RL or Fortnite for next stream (2 hours)" },
+                { count: 115, text: "Choose my nail color" },
+                { count: 130, text: "Recreate a TikTok challenge" },
+                { count: 145, text: "Eat spicy food while ranked RL" }
+            ],
+            tier2: [
+                { count: 160, text: "NEW EMOTE + VIP night" },
+                { count: 175, text: "Ghost cam for the rest of the stream" },
+                { count: 190, text: "3-hour RL games with chat" },
+                { count: 210, text: "Beanboozled while playing ranked" },
+                { count: 230, text: "Chat picks my overlay/alerts for a day" },
+                { count: 245, text: "Collab with esports client (surprise guest)" }
+            ],
+            tier3: [
+                { count: 260, text: "Chat chooses my Twitter/X pfp for a week" },
+                { count: 285, text: "12-hour stream" },
+                { count: 310, text: "Cosplay stream (3 hours)" },
+                { count: 330, text: "Every RL goal = 5 pushups IRL" }
+            ],
+            tier4: [
+                { count: 345, text: "Watch party (chat picks movie/show)" },
+                { count: 360, text: "Among Us lobbies with chat" },
+                { count: 375, text: "Karaoke festival stream in-game mic on w/ chat" },
+                { count: 385, text: "Room tour + AMA video" },
+                { count: 395, text: "Chat picks mystery game I've never played" },
+                { count: 400, text: "Movie night with stream + custom Discord role for top 10 gifters" }
+            ]
+        };
+
+        function renderMilestones() {
+            Object.keys(milestones).forEach(tier => {
+                const container = document.getElementById(tier);
+                container.innerHTML = milestones[tier].map(m =>
+                    `<div class="milestone" data-count="${m.count}">
+                        <div class="milestone-count">${m.count} SUBS</div>
+                        <div class="milestone-text">${m.text}</div>
+                    </div>`
+                ).join('');
+            });
+        }
+
+        function updateProgress() {
+            const subCount = parseInt(document.getElementById('subCount').value) || 61;
+            const progress = Math.min((subCount / 400) * 100, 100);
+
+            // Update progress bar
+            document.getElementById('progressBar').style.width = progress + '%';
+            document.getElementById('progressPercent').textContent = Math.round(progress) + '%';
+            document.getElementById('currentSubs').textContent = subCount;
+
+            // Week card updates removed - HTML doesn't have week card elements
+
+            // Update milestones - hide completed, show remaining goals
+            document.querySelectorAll('.milestone').forEach(m => {
+                const count = parseInt(m.dataset.count);
+                m.classList.remove('completed', 'next', 'upcoming');
+
+                if (subCount >= count) {
+                    // Hide completed milestones
+                    m.style.display = 'none';
+                } else {
+                    // Show remaining milestones
+                    m.style.display = 'block';
+                    if (subCount >= count - 10) {
+                        m.classList.add('next');
+                    } else {
+                        m.classList.add('upcoming');
+                    }
+                }
+            });
+
+            // Update timestamp
+            const now = new Date();
+            document.getElementById('timestamp').textContent = now.toLocaleString();
+
+            // Save to localStorage
+            localStorage.setItem('subCount', subCount);
+        }
+
+        function updateWeekCard(weekId, currentSubs, weekTarget, weekNum) {
+            const weekSubs = [0, 78, 85, 92, 95];
+            const weekCumulative = [0, 78, 163, 255, 350];
+
+            const currentWeekSubs = Math.max(0, Math.min(currentSubs - (weekCumulative[weekNum - 1] || 0), weekTarget));
+            const status = currentWeekSubs >= weekTarget ? '✓ COMPLETE' : `Progress: ${currentWeekSubs}/${weekTarget}`;
+
+            document.getElementById(weekId + 'Status').textContent = status;
+
+            if (currentWeekSubs >= weekTarget) {
+                document.getElementById(weekId + 'Card').classList.add('completed');
+            } else {
+                document.getElementById(weekId + 'Card').classList.remove('completed');
+            }
+        }
+
+        function resetProgress() {
+            if (confirm('Reset sub count to 0?')) {
+                document.getElementById('subCount').value = 0;
+                updateProgress();
+            }
+        }
+
+        // Initialize
+        renderMilestones();
+        const saved = localStorage.getItem('subCount');
+        if (saved) {
+            document.getElementById('subCount').value = saved;
+        }
+        updateProgress();
+    </script>
+</body>
+</html>
